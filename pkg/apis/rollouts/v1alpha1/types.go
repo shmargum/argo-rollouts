@@ -495,6 +495,12 @@ type IstioDestinationRule struct {
 	CanarySubsetName string `json:"canarySubsetName" protobuf:"bytes,2,opt,name=canarySubsetName"`
 	// StableSubsetName is the subset name to modify labels with stable ReplicaSet pod template hash value
 	StableSubsetName string `json:"stableSubsetName" protobuf:"bytes,3,opt,name=stableSubsetName"`
+	// SkipSubsetHashLabels if true, the controller will NOT inject rollouts-pod-template-hash
+	// labels into the DestinationRule subsets. Use this when you want to use ephemeral metadata
+	// labels (stableMetadata/canaryMetadata) for subset selection instead, which enables
+	// multi-cluster failover with consistent labels across clusters.
+	// +optional
+	SkipSubsetHashLabels bool `json:"skipSubsetHashLabels,omitempty" protobuf:"varint,4,opt,name=skipSubsetHashLabels"`
 }
 
 // AppMeshTrafficRouting configuration for AWS AppMesh service mesh to enable fine grain configuration

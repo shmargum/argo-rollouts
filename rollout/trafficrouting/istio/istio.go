@@ -341,6 +341,12 @@ func (r *Reconciler) UpdateHash(canaryHash, stableHash string, additionalDestina
 	if dRuleSpec == nil {
 		return nil
 	}
+	// Skip all DestinationRule subset label modifications if user manages them via
+	// stableMetadata/canaryMetadata (needed for multi-cluster failover with consistent labels)
+	if dRuleSpec.SkipSubsetHashLabels {
+		r.log.Infof("skipSubsetHashLabels=true, not modifying DestinationRule subset labels")
+		return nil
+	}
 	ctx := context.TODO()
 	client := r.client.Resource(istioutil.GetIstioDestinationRuleGVR()).Namespace(r.rollout.Namespace)
 
